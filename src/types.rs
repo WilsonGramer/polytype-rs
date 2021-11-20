@@ -2,6 +2,9 @@ use itertools::Itertools;
 use std::collections::{HashMap, VecDeque};
 use std::fmt;
 
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
 use crate::{Context, Name};
 
 /// Represents a [type variable][1] (an unknown type).
@@ -18,6 +21,7 @@ pub type Variable = usize;
 /// [`ptp!`]: macro.ptp.html
 /// [`Type::generalize`]: enum.Type.html#method.generalize
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum TypeSchema<N: Name = &'static str> {
     /// Non-polymorphic types (e.g. `α → β`, `int → bool`)
     Monotype(Type<N>),
@@ -178,6 +182,7 @@ impl<N: Name> fmt::Display for TypeSchema<N> {
 /// [`Type::arrow`]: enum.TypeSchema.html#method.instantiate
 /// [1]: https://en.wikipedia.org/wiki/Hindley–Milner_type_system#Monotypes
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum Type<N: Name = &'static str> {
     /// Primitive or composite types (e.g. `int`, `List(α)`, `α → β`)
     ///
